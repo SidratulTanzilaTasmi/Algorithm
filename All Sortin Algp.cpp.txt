@@ -1,0 +1,216 @@
+#include<bits/stdc++.h>
+#include<time.h>
+#include<stdio.h>
+#include<windows.h>
+#include<fstream>
+
+using namespace std;
+
+int bubblesortarr[100000];
+int selectionsortarr[100000];
+int mergesortarr[100000];
+int arr[100000];
+void bubblesort(int n)
+
+{
+    for(int i=0; i<n; i++)
+    {
+        for(int j=i+1; j<n; j++)
+        {
+            if(bubblesortarr[j]<bubblesortarr[i])
+            {
+                swap(bubblesortarr[i], bubblesortarr[j]);
+            }
+        }
+    }
+}
+
+void selectionsort(int n)
+{
+
+    int min;
+    for(int i=0; i<n; i++)
+    {
+        min=i;
+        for(int j=i+1; j<n; j++)
+        {
+            if(selectionsortarr[j]<selectionsortarr[min])
+            {
+                min=j;
+            }
+        }
+        swap(selectionsortarr[i],selectionsortarr[min]);
+    }
+}
+
+void merge_(int n, int left, int mid, int right)
+{
+    int i=left;
+    int j=mid+1;
+
+    int temparr[n];
+
+    for( int k=0; k<n; k++)
+    {
+        temparr[k]=mergesortarr[k];
+
+    }
+
+    for(int k=left; k<= right; k++)
+    {
+
+        if(i>mid)
+        {
+            mergesortarr[k]= temparr[j++];
+        }
+
+        else if(j>right)
+        {
+            mergesortarr[k]= temparr[i++];
+        }
+        else if(temparr[j]< mergesortarr[i])
+        {
+            mergesortarr[k]=temparr[j++];
+
+        }
+        else
+        {
+            mergesortarr[k]=temparr[i++];
+        }
+    }
+}
+
+
+
+void mergesort(int n, int left, int right)
+{
+    if(left>=right)
+    {
+        return;
+    }
+    int mid=left+(right-left)/2;
+    mergesort(n, left, mid);
+    mergesort(n, mid+1, right);
+
+    merge_(n,left, mid, right);
+}
+
+
+void timecompare(int n, int op)
+{
+    long int before=GetTickCount();
+
+    cout<<"\n1.Bubble Sort\n2.Selection Sort\n3.Merge Sort\n4.STL sort\n";
+
+    if(op==1)
+    {
+        cout<<"\nBubble Sort: \n";
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<bubblesortarr[i]<<" ";
+        }
+        cout<<endl;
+        bubblesort(n);
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<bubblesortarr[i]<<" ";
+        }
+        cout<<endl;
+    }
+    if(op==2)
+    {
+        cout<<"\nSelection Sort :\n";
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<selectionsortarr[i]<<" ";
+        }
+        cout<<endl;
+
+        selectionsort(n);
+
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<selectionsortarr[i]<<" ";
+        }
+        cout<<endl;
+    }
+    if(op==3)
+    {
+        cout<<"\nMerge Sort: \n";
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<mergesortarr[i]<<" ";
+        }
+        cout<<endl;
+        mergesort(n,0,n-1);
+
+        for(int i=0; i<n; i++)
+        {
+            cout<<mergesortarr[i]<<" ";
+        }
+        cout<<endl;
+    }
+
+    if(op==4)
+    {
+        cout<<endl<<"STL Sort :"<<endl;
+        sort(arr,arr+ n);
+
+        for(int i=0; i< n; i++)
+        {
+
+            cout<<arr[i]<<" ";
+        }
+        cout<<endl;
+    }
+
+
+    long int after = GetTickCount();
+    cout << "\nExecution Time: " << (after - before) << "ms";
+}
+
+int main()
+{
+    /*cout<<"Emter the size of the array: ";
+    int n;
+    cin>>n;
+   */
+
+
+    //clock.tick();
+    int temp;
+    /*for(int i = 0; i < n; i++){
+        //temp = rand() %21;
+        int num; cin>>num;
+        out << num << " ";
+    }
+*/
+   ifstream in("random-numbers.txt");
+
+    for(int i=0; i<5000; i++)
+    {
+
+        int temp;
+        in >> temp;
+        bubblesortarr[i]=temp;
+        selectionsortarr[i]=temp;
+        mergesortarr[i]=temp;
+        arr[i]=temp;
+    }
+
+
+    timecompare(5000, 1);
+    cout<<endl;
+    timecompare(5000,2);
+    cout<<endl;
+    timecompare(5000, 3);
+    cout<<endl;
+    //timecompare(n, 4);
+
+
+}
